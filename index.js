@@ -34,6 +34,16 @@ async function run(){
             const order=await orderCollection.insertOne(newOrder);
             res.send(order);
         })
+
+        // get order 
+        app.get('/order', async (req, res) => {
+           
+            const query = {} ;
+            const cursor = orderCollection.find(query);
+            const order = await cursor.toArray();
+            res.send(order);
+        })
+        //
           // post single service with insertOne method 
         app.post('/service', async (req, res) => {
             const newService = req.body ;
