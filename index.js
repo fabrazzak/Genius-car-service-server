@@ -26,6 +26,14 @@ async function run(){
     try{
         await client.connect();
         const serviceCollection = client.db("carServices").collection("service");
+        const orderCollection= client.db("carServices").collection("order");
+        //   order post 
+        app.post('/order', async(req,res)=>{
+            const newOrder=req.body;
+            console.log(newOrder);
+            const order=await orderCollection.insertOne(newOrder);
+            res.send(order);
+        })
           // post single service with insertOne method 
         app.post('/service', async (req, res) => {
             const newService = req.body ;
@@ -42,11 +50,12 @@ async function run(){
             res.send(service);
         })
         // get single service with findOne method 
-        app.get('/service/:id ', async(req,res)=>{
-            const id=req.params.id;
-            const query={ _id: ObjectId(id)};
+        app.get('/service/:id', async(req,res)=>{
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
             const service= await serviceCollection.findOne(query);
             res.send(service);
+           
         })
 
         // Delete single service with deleteOne method 
