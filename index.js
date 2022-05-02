@@ -28,6 +28,13 @@ async function run(){
         const serviceCollection = client.db("carServices").collection("service");
         const orderCollection= client.db("carServices").collection("order");
         //   order post 
+
+         // AUTH 
+         app.post('/login',async(req,res)=>{
+             const user= req.body;
+             const accessToken= jwt.sign(user,process.env.ACCESS_TOKEN,{expiresIn: '1d'});
+             res.send({accessToken});
+         })
         app.post('/order', async(req,res)=>{
             const newOrder=req.body;
             console.log(newOrder);
@@ -37,8 +44,9 @@ async function run(){
 
         // get order 
         app.get('/order', async (req, res) => {
-           
-            const query = {} ;
+            const email= req.query.email;
+            console.log(email);
+            const query = {email} ;
             const cursor = orderCollection.find(query);
             const order = await cursor.toArray();
             res.send(order);
